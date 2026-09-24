@@ -1,0 +1,1401 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "name": "Alex Morgan",
+      "email": "alex@example.com",
+      "passwordHash": "$2b$10$/dGZdD6esvV2yH3tbmEvg.q45Rw3tJ82HgPvAn0BTEtxu35R5obWq",
+      "role": "student"
+    },
+    {
+      "id": "u2",
+      "name": "Sarah Chen",
+      "email": "sarah@example.com",
+      "passwordHash": "$2b$10$wBY7wL4jjL1OqTT9PJQsA.sUD8IMfuNecmBfEAJ8AZoVyRrrkPXgC",
+      "role": "instructor"
+    }
+  ],
+  "courses": [
+    {
+      "id": "c1",
+      "title": "Advanced TypeScript & Design Patterns",
+      "description": "Master advanced TypeScript and practical design patterns.",
+      "instructorId": "u2",
+      "instructor": "Sarah Chen",
+      "category": "Development",
+      "level": "Advanced",
+      "durationHours": 18,
+      "published": true
+    },
+    {
+      "id": "c2",
+      "title": "React Performance & Architecture",
+      "description": "Build fast, scalable React applications.",
+      "instructorId": "u2",
+      "instructor": "Sarah Chen",
+      "category": "Development",
+      "level": "Intermediate",
+      "durationHours": 16,
+      "published": true
+    },
+    {
+      "id": "c3",
+      "title": "System Design Fundamentals",
+      "description": "Learn scalable architecture fundamentals.",
+      "instructorId": "u2",
+      "instructor": "Sarah Chen",
+      "category": "Architecture",
+      "level": "Intermediate",
+      "durationHours": 20,
+      "published": true
+    },
+    {
+      "id": "c4",
+      "title": "Data Structures & Algorithms",
+      "description": "Core data structures, algorithms and complexity.",
+      "instructorId": "u2",
+      "instructor": "Sarah Chen",
+      "category": "Computer Science",
+      "level": "Intermediate",
+      "durationHours": 24,
+      "published": true
+    }
+  ],
+  "enrollments": [
+    {
+      "id": "e1",
+      "userId": "u1",
+      "courseId": "c1",
+      "progress": 100,
+      "completedLessons": 12,
+      "lastLessonId": "c1-l9",
+      "completedLessonIds": [
+        "l1",
+        "l2",
+        "l3",
+        "c1-l4",
+        "c1-l5",
+        "c1-l6",
+        "c1-l7",
+        "c1-l8",
+        "c1-l12",
+        "c1-l11",
+        "c1-l10",
+        "c1-l9"
+      ],
+      "status": "completed",
+      "completedAt": "2026-09-21T09:30:58.766Z"
+    },
+    {
+      "id": "e2",
+      "userId": "u1",
+      "courseId": "c2",
+      "progress": 44,
+      "completedLessons": 7,
+      "lastLessonId": "c2-l7",
+      "completedLessonIds": [
+        "l4",
+        "l5",
+        "l6",
+        "c2-l4",
+        "c2-l5",
+        "c2-l6",
+        "c2-l7"
+      ],
+      "status": "in_progress"
+    },
+    {
+      "id": "e3",
+      "userId": "u1",
+      "courseId": "c3",
+      "progress": 85,
+      "completedLessons": 17,
+      "lastLessonId": "c3-l17",
+      "completedLessonIds": [
+        "l7",
+        "l8",
+        "l9",
+        "c3-l4",
+        "c3-l5",
+        "c3-l6",
+        "c3-l7",
+        "c3-l8",
+        "c3-l9",
+        "c3-l10",
+        "c3-l11",
+        "c3-l12",
+        "c3-l13",
+        "c3-l14",
+        "c3-l15",
+        "c3-l16",
+        "c3-l17"
+      ],
+      "status": "in_progress"
+    },
+    {
+      "id": "e4",
+      "userId": "u1",
+      "courseId": "c4",
+      "progress": 21,
+      "completedLessons": 5,
+      "lastLessonId": "c4-l5",
+      "completedLessonIds": [
+        "l10",
+        "l11",
+        "l12",
+        "c4-l4",
+        "c4-l5"
+      ],
+      "status": "in_progress"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l1",
+      "courseId": "c1",
+      "title": "Introduction to TypeScript",
+      "order": 1,
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Learn this lesson with the interactive Skillbridge player.",
+      "duration": "9:00",
+      "resources": []
+    },
+    {
+      "id": "l2",
+      "courseId": "c1",
+      "title": "Type System Basics",
+      "order": 2,
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Learn this lesson with the interactive Skillbridge player.",
+      "duration": "10:00",
+      "resources": []
+    },
+    {
+      "id": "l3",
+      "courseId": "c1",
+      "title": "Interfaces vs Types",
+      "order": 3,
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Learn this lesson with the interactive Skillbridge player.",
+      "duration": "11:00",
+      "resources": []
+    },
+    {
+      "id": "c1-l4",
+      "courseId": "c1",
+      "title": "Generics Deep Dive",
+      "order": 4,
+      "duration": "12:00",
+      "description": "Generics Deep Dive lesson for Advanced TypeScript & Design Patterns.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c1-l5",
+      "courseId": "c1",
+      "title": "Generic Constraints",
+      "order": 5,
+      "duration": "13:00",
+      "description": "Generic Constraints lesson for Advanced TypeScript & Design Patterns.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c1-l6",
+      "courseId": "c1",
+      "title": "Conditional Types",
+      "order": 6,
+      "duration": "14:00",
+      "description": "Conditional Types lesson for Advanced TypeScript & Design Patterns.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c1-l7",
+      "courseId": "c1",
+      "title": "Mapped Types",
+      "order": 7,
+      "duration": "15:00",
+      "description": "Mapped Types lesson for Advanced TypeScript & Design Patterns.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c1-l8",
+      "courseId": "c1",
+      "title": "Utility Types",
+      "order": 8,
+      "duration": "16:00",
+      "description": "Utility Types lesson for Advanced TypeScript & Design Patterns.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c1-l9",
+      "courseId": "c1",
+      "title": "Advanced Functions",
+      "order": 9,
+      "duration": "17:00",
+      "description": "Advanced Functions lesson for Advanced TypeScript & Design Patterns.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c1-l10",
+      "courseId": "c1",
+      "title": "Design Patterns in TypeScript",
+      "order": 10,
+      "duration": "8:00",
+      "description": "Design Patterns in TypeScript lesson for Advanced TypeScript & Design Patterns.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c1-l11",
+      "courseId": "c1",
+      "title": "Factory & Observer Patterns",
+      "order": 11,
+      "duration": "9:00",
+      "description": "Factory & Observer Patterns lesson for Advanced TypeScript & Design Patterns.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c1-l12",
+      "courseId": "c1",
+      "title": "Final TypeScript Project",
+      "order": 12,
+      "duration": "10:00",
+      "description": "Final TypeScript Project lesson for Advanced TypeScript & Design Patterns.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "l4",
+      "courseId": "c2",
+      "title": "React Rendering Fundamentals",
+      "order": 1,
+      "duration": "10:20",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Understand rendering, reconciliation and component updates.",
+      "resources": []
+    },
+    {
+      "id": "l5",
+      "courseId": "c2",
+      "title": "Component Architecture",
+      "order": 2,
+      "duration": "14:35",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Learn practical techniques for reducing unnecessary renders.",
+      "resources": []
+    },
+    {
+      "id": "l6",
+      "courseId": "c2",
+      "title": "Memoization & Performance",
+      "order": 3,
+      "duration": "16:10",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Organize React applications for maintainability and scale.",
+      "resources": []
+    },
+    {
+      "id": "c2-l4",
+      "courseId": "c2",
+      "title": "useMemo and useCallback",
+      "order": 4,
+      "duration": "12:00",
+      "description": "useMemo and useCallback lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l5",
+      "courseId": "c2",
+      "title": "Code Splitting",
+      "order": 5,
+      "duration": "13:00",
+      "description": "Code Splitting lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l6",
+      "courseId": "c2",
+      "title": "Lazy Loading",
+      "order": 6,
+      "duration": "14:00",
+      "description": "Lazy Loading lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l7",
+      "courseId": "c2",
+      "title": "State Management Patterns",
+      "order": 7,
+      "duration": "15:00",
+      "description": "State Management Patterns lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l8",
+      "courseId": "c2",
+      "title": "Context Performance",
+      "order": 8,
+      "duration": "16:00",
+      "description": "Context Performance lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l9",
+      "courseId": "c2",
+      "title": "Virtualization",
+      "order": 9,
+      "duration": "17:00",
+      "description": "Virtualization lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l10",
+      "courseId": "c2",
+      "title": "Data Fetching Strategies",
+      "order": 10,
+      "duration": "8:00",
+      "description": "Data Fetching Strategies lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l11",
+      "courseId": "c2",
+      "title": "Error Boundaries",
+      "order": 11,
+      "duration": "9:00",
+      "description": "Error Boundaries lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l12",
+      "courseId": "c2",
+      "title": "Testing Performance",
+      "order": 12,
+      "duration": "10:00",
+      "description": "Testing Performance lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l13",
+      "courseId": "c2",
+      "title": "Scalable Folder Structure",
+      "order": 13,
+      "duration": "11:00",
+      "description": "Scalable Folder Structure lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l14",
+      "courseId": "c2",
+      "title": "React Profiling",
+      "order": 14,
+      "duration": "12:00",
+      "description": "React Profiling lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l15",
+      "courseId": "c2",
+      "title": "Production Optimization",
+      "order": 15,
+      "duration": "13:00",
+      "description": "Production Optimization lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c2-l16",
+      "courseId": "c2",
+      "title": "Final React Performance Project",
+      "order": 16,
+      "duration": "14:00",
+      "description": "Final React Performance Project lesson for React Performance & Architecture.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "l7",
+      "courseId": "c3",
+      "title": "System Design Basics",
+      "order": 1,
+      "duration": "12:10",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Learn the core concepts behind scalable systems.",
+      "resources": []
+    },
+    {
+      "id": "l8",
+      "courseId": "c3",
+      "title": "Requirements & Trade-offs",
+      "order": 2,
+      "duration": "15:25",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Explore caching strategies and traffic distribution.",
+      "resources": []
+    },
+    {
+      "id": "l9",
+      "courseId": "c3",
+      "title": "API Design",
+      "order": 3,
+      "duration": "18:40",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Put system design principles together in practical architectures.",
+      "resources": []
+    },
+    {
+      "id": "c3-l4",
+      "courseId": "c3",
+      "title": "Database Fundamentals",
+      "order": 4,
+      "duration": "12:00",
+      "description": "Database Fundamentals lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l5",
+      "courseId": "c3",
+      "title": "Caching",
+      "order": 5,
+      "duration": "13:00",
+      "description": "Caching lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l6",
+      "courseId": "c3",
+      "title": "Load Balancing",
+      "order": 6,
+      "duration": "14:00",
+      "description": "Load Balancing lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l7",
+      "courseId": "c3",
+      "title": "Replication",
+      "order": 7,
+      "duration": "15:00",
+      "description": "Replication lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l8",
+      "courseId": "c3",
+      "title": "Partitioning",
+      "order": 8,
+      "duration": "16:00",
+      "description": "Partitioning lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l9",
+      "courseId": "c3",
+      "title": "Message Queues",
+      "order": 9,
+      "duration": "17:00",
+      "description": "Message Queues lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l10",
+      "courseId": "c3",
+      "title": "Consistency Models",
+      "order": 10,
+      "duration": "8:00",
+      "description": "Consistency Models lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l11",
+      "courseId": "c3",
+      "title": "CAP Theorem",
+      "order": 11,
+      "duration": "9:00",
+      "description": "CAP Theorem lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l12",
+      "courseId": "c3",
+      "title": "Rate Limiting",
+      "order": 12,
+      "duration": "10:00",
+      "description": "Rate Limiting lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l13",
+      "courseId": "c3",
+      "title": "Observability",
+      "order": 13,
+      "duration": "11:00",
+      "description": "Observability lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l14",
+      "courseId": "c3",
+      "title": "Fault Tolerance",
+      "order": 14,
+      "duration": "12:00",
+      "description": "Fault Tolerance lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l15",
+      "courseId": "c3",
+      "title": "Distributed Systems",
+      "order": 15,
+      "duration": "13:00",
+      "description": "Distributed Systems lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l16",
+      "courseId": "c3",
+      "title": "Security at Scale",
+      "order": 16,
+      "duration": "14:00",
+      "description": "Security at Scale lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l17",
+      "courseId": "c3",
+      "title": "Capacity Planning",
+      "order": 17,
+      "duration": "15:00",
+      "description": "Capacity Planning lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l18",
+      "courseId": "c3",
+      "title": "Architecture Case Study",
+      "order": 18,
+      "duration": "16:00",
+      "description": "Architecture Case Study lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l19",
+      "courseId": "c3",
+      "title": "Design Review",
+      "order": 19,
+      "duration": "17:00",
+      "description": "Design Review lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c3-l20",
+      "courseId": "c3",
+      "title": "Final System Design",
+      "order": 20,
+      "duration": "8:00",
+      "description": "Final System Design lesson for System Design Fundamentals.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "l10",
+      "courseId": "c4",
+      "title": "Arrays & Strings",
+      "order": 1,
+      "duration": "11:45",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Build strong fundamentals and analyze time complexity.",
+      "resources": []
+    },
+    {
+      "id": "l11",
+      "courseId": "c4",
+      "title": "Time and Space Complexity",
+      "order": 2,
+      "duration": "13:50",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Master essential linear data structures.",
+      "resources": []
+    },
+    {
+      "id": "l12",
+      "courseId": "c4",
+      "title": "Stacks",
+      "order": 3,
+      "duration": "17:15",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "description": "Understand traversal and common graph and tree patterns.",
+      "resources": []
+    },
+    {
+      "id": "c4-l4",
+      "courseId": "c4",
+      "title": "Queues",
+      "order": 4,
+      "duration": "12:00",
+      "description": "Queues lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l5",
+      "courseId": "c4",
+      "title": "Linked Lists",
+      "order": 5,
+      "duration": "13:00",
+      "description": "Linked Lists lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l6",
+      "courseId": "c4",
+      "title": "Hash Tables",
+      "order": 6,
+      "duration": "14:00",
+      "description": "Hash Tables lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l7",
+      "courseId": "c4",
+      "title": "Recursion",
+      "order": 7,
+      "duration": "15:00",
+      "description": "Recursion lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l8",
+      "courseId": "c4",
+      "title": "Binary Search",
+      "order": 8,
+      "duration": "16:00",
+      "description": "Binary Search lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l9",
+      "courseId": "c4",
+      "title": "Sorting Algorithms",
+      "order": 9,
+      "duration": "17:00",
+      "description": "Sorting Algorithms lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l10",
+      "courseId": "c4",
+      "title": "Trees",
+      "order": 10,
+      "duration": "8:00",
+      "description": "Trees lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l11",
+      "courseId": "c4",
+      "title": "Binary Search Trees",
+      "order": 11,
+      "duration": "9:00",
+      "description": "Binary Search Trees lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l12",
+      "courseId": "c4",
+      "title": "Heaps",
+      "order": 12,
+      "duration": "10:00",
+      "description": "Heaps lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l13",
+      "courseId": "c4",
+      "title": "Priority Queues",
+      "order": 13,
+      "duration": "11:00",
+      "description": "Priority Queues lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l14",
+      "courseId": "c4",
+      "title": "Graphs",
+      "order": 14,
+      "duration": "12:00",
+      "description": "Graphs lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l15",
+      "courseId": "c4",
+      "title": "Graph Traversal",
+      "order": 15,
+      "duration": "13:00",
+      "description": "Graph Traversal lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l16",
+      "courseId": "c4",
+      "title": "Dynamic Programming",
+      "order": 16,
+      "duration": "14:00",
+      "description": "Dynamic Programming lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l17",
+      "courseId": "c4",
+      "title": "Greedy Algorithms",
+      "order": 17,
+      "duration": "15:00",
+      "description": "Greedy Algorithms lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l18",
+      "courseId": "c4",
+      "title": "Backtracking",
+      "order": 18,
+      "duration": "16:00",
+      "description": "Backtracking lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l19",
+      "courseId": "c4",
+      "title": "Advanced Problem Solving",
+      "order": 19,
+      "duration": "17:00",
+      "description": "Advanced Problem Solving lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l20",
+      "courseId": "c4",
+      "title": "Algorithm Design",
+      "order": 20,
+      "duration": "8:00",
+      "description": "Algorithm Design lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l21",
+      "courseId": "c4",
+      "title": "Interview Patterns",
+      "order": 21,
+      "duration": "9:00",
+      "description": "Interview Patterns lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l22",
+      "courseId": "c4",
+      "title": "Complexity Review",
+      "order": 22,
+      "duration": "10:00",
+      "description": "Complexity Review lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l23",
+      "courseId": "c4",
+      "title": "Practice Set",
+      "order": 23,
+      "duration": "11:00",
+      "description": "Practice Set lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    },
+    {
+      "id": "c4-l24",
+      "courseId": "c4",
+      "title": "Final Algorithms Challenge",
+      "order": 24,
+      "duration": "12:00",
+      "description": "Final Algorithms Challenge lesson for Data Structures & Algorithms.",
+      "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "resources": []
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "q1",
+      "courseId": "c1",
+      "title": "Advanced TypeScript & Design Patterns Assessment",
+      "questions": [
+        {
+          "id": "1",
+          "question": "Which TypeScript feature allows reusable type parameters?",
+          "options": [
+            "Generics",
+            "Decorators",
+            "Namespaces",
+            "Enums"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "2",
+          "question": "Which utility type makes all properties optional?",
+          "options": [
+            "Pick",
+            "Partial",
+            "Record",
+            "Required"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "3",
+          "question": "Which principle gives a class one reason to change?",
+          "options": [
+            "DRY",
+            "Single Responsibility",
+            "YAGNI",
+            "KISS"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "4",
+          "question": "Which pattern supports one-to-many event subscriptions?",
+          "options": [
+            "Factory",
+            "Observer",
+            "Builder",
+            "Adapter"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "5",
+          "question": "Which keyword marks a property as read-only?",
+          "options": [
+            "const",
+            "readonly",
+            "sealed",
+            "static"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "6",
+          "question": "Which type combines several types with an OR relationship?",
+          "options": [
+            "Union",
+            "Tuple",
+            "Enum",
+            "Namespace"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "7",
+          "question": "What does an interface primarily describe?",
+          "options": [
+            "Runtime database schema",
+            "A type shape",
+            "CSS rules",
+            "A network request"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "8",
+          "question": "Which feature creates a type from the keys of another type?",
+          "options": [
+            "keyof",
+            "typeof",
+            "instanceof",
+            "extends"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "quiz-c2",
+      "courseId": "c2",
+      "title": "React Performance & Architecture Assessment",
+      "questions": [
+        {
+          "id": "c2-q1",
+          "question": "Which hook memoizes a computed value?",
+          "options": [
+            "useMemo",
+            "useEffect",
+            "useRef",
+            "useId"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c2-q2",
+          "question": "Which hook memoizes a function reference?",
+          "options": [
+            "useState",
+            "useCallback",
+            "useReducer",
+            "useLayoutEffect"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "c2-q3",
+          "question": "What does React.memo primarily help prevent?",
+          "options": [
+            "Network calls",
+            "Unnecessary re-renders",
+            "CSS parsing",
+            "Database writes"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "c2-q4",
+          "question": "What is code splitting used for?",
+          "options": [
+            "Reducing initial JavaScript loaded",
+            "Increasing bundle size",
+            "Replacing CSS",
+            "Removing tests"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c2-q5",
+          "question": "Which tool helps inspect React rendering performance?",
+          "options": [
+            "React Profiler",
+            "npm init",
+            "JSON.stringify",
+            "Git"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c2-q6",
+          "question": "Why use list virtualization?",
+          "options": [
+            "Render only visible items",
+            "Encrypt list data",
+            "Create APIs",
+            "Validate forms"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c2-q7",
+          "question": "What is lazy loading useful for?",
+          "options": [
+            "Deferring non-critical code",
+            "Disabling routing",
+            "Removing components",
+            "Blocking requests"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c2-q8",
+          "question": "Which boundary catches rendering errors in descendants?",
+          "options": [
+            "Error Boundary",
+            "Route Guard",
+            "Service Worker",
+            "Middleware"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "quiz-c3",
+      "courseId": "c3",
+      "title": "System Design Fundamentals Assessment",
+      "questions": [
+        {
+          "id": "c3-q1",
+          "question": "Which concept describes the trade-off between consistency, availability and partition tolerance?",
+          "options": [
+            "CAP theorem",
+            "DRY",
+            "SOLID",
+            "ACID only"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c3-q2",
+          "question": "What is caching primarily used to improve?",
+          "options": [
+            "Repeated access latency",
+            "Source code formatting",
+            "Password length",
+            "File naming"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c3-q3",
+          "question": "What does horizontal scaling add?",
+          "options": [
+            "More machines/instances",
+            "More CPU cores in one machine only",
+            "More comments",
+            "More database columns"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c3-q4",
+          "question": "What is database replication?",
+          "options": [
+            "Keeping copies of data on multiple nodes",
+            "Deleting duplicates",
+            "Compressing queries",
+            "Renaming tables"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c3-q5",
+          "question": "What is a message queue useful for?",
+          "options": [
+            "Asynchronous decoupling",
+            "CSS styling",
+            "Password hashing",
+            "Image cropping"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c3-q6",
+          "question": "What does load balancing distribute?",
+          "options": [
+            "Traffic across servers",
+            "Database schemas",
+            "Source files",
+            "User passwords"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c3-q7",
+          "question": "What is rate limiting designed to control?",
+          "options": [
+            "Request frequency",
+            "Screen brightness",
+            "File size only",
+            "Database indexes"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c3-q8",
+          "question": "What is observability commonly built from?",
+          "options": [
+            "Logs, metrics and traces",
+            "HTML, CSS and SVG",
+            "Git, npm and SSH",
+            "Only database rows"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "quiz-c4",
+      "courseId": "c4",
+      "title": "Data Structures & Algorithms Assessment",
+      "questions": [
+        {
+          "id": "c4-q1",
+          "question": "Which data structure uses FIFO ordering?",
+          "options": [
+            "Stack",
+            "Queue",
+            "Tree",
+            "Graph"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "c4-q2",
+          "question": "Which algorithm searches a sorted array in logarithmic time?",
+          "options": [
+            "Linear Search",
+            "Binary Search",
+            "Bubble Sort",
+            "DFS"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "c4-q3",
+          "question": "Which structure follows LIFO ordering?",
+          "options": [
+            "Queue",
+            "Stack",
+            "Heap",
+            "Graph"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "c4-q4",
+          "question": "Which traversal visits depth before siblings?",
+          "options": [
+            "BFS",
+            "DFS",
+            "Binary Search",
+            "Hashing"
+          ],
+          "answer": 1
+        },
+        {
+          "id": "c4-q5",
+          "question": "Average-case lookup in a good hash table is typically?",
+          "options": [
+            "O(1)",
+            "O(n²)",
+            "O(log n!)",
+            "O(2^n)"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c4-q6",
+          "question": "Which algorithm repeatedly chooses the locally best option?",
+          "options": [
+            "Greedy",
+            "Backtracking",
+            "DFS only",
+            "Hashing"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c4-q7",
+          "question": "What is dynamic programming commonly based on?",
+          "options": [
+            "Overlapping subproblems and optimal substructure",
+            "Random guessing",
+            "Only recursion without storage",
+            "CSS selectors"
+          ],
+          "answer": 0
+        },
+        {
+          "id": "c4-q8",
+          "question": "Which structure is commonly used to implement a priority queue?",
+          "options": [
+            "Heap",
+            "Linked List only",
+            "String",
+            "Set of CSS rules"
+          ],
+          "answer": 0
+        }
+      ]
+    }
+  ],
+  "quizAttempts": [
+    {
+      "id": "67f13b0c-3397-4aa2-8dbc-346ac0d601c7",
+      "userId": "u1",
+      "quizId": "q1",
+      "score": 40,
+      "maxScore": 100,
+      "answers": [
+        {
+          "questionId": "4",
+          "answer": 2
+        },
+        {
+          "questionId": "8",
+          "answer": 2
+        },
+        {
+          "questionId": "2",
+          "answer": 1
+        },
+        {
+          "questionId": "7",
+          "answer": 2
+        },
+        {
+          "questionId": "5",
+          "answer": 1
+        }
+      ],
+      "questionIds": [
+        "2",
+        "4",
+        "5",
+        "7",
+        "8"
+      ],
+      "submittedAt": "2026-09-21T09:30:24.164Z"
+    }
+  ],
+  "assignments": [
+    {
+      "id": "a1",
+      "courseId": "c2",
+      "title": "Build a Redux Store",
+      "dueAt": "2026-09-18T18:29:00+05:30",
+      "status": "pending"
+    },
+    {
+      "id": "a2",
+      "courseId": "c1",
+      "title": "TypeScript Generics Exercise",
+      "dueAt": "2026-09-19T18:29:00+05:30",
+      "status": "pending"
+    }
+  ],
+  "submissions": [
+    {
+      "id": "0afc40cc-798d-4577-b511-e63cc2f8b000",
+      "assignmentId": "a1",
+      "courseId": "c2",
+      "userId": "u1",
+      "assignmentTitle": "Build a Redux Store",
+      "status": "done",
+      "answer": "GANG SHI",
+      "submittedAt": "2026-09-21T09:34:43.436Z",
+      "score": 67,
+      "feedback": "Very Noice",
+      "gradedAt": "2026-09-21T09:34:58.450Z",
+      "remarksProvided": true
+    }
+  ],
+  "comments": [],
+  "notifications": [
+    {
+      "id": "2864c9af-8261-4a27-8989-b77fd46d1e03",
+      "userId": "u1",
+      "title": "Assignment checked",
+      "description": "Build a Redux Store: 67/100 — Very Noice",
+      "read": false,
+      "createdAt": "2026-09-21T09:34:58.450Z"
+    },
+    {
+      "id": "cbaac139-b1ce-46b1-b6c0-805dd546d447",
+      "userId": "u1",
+      "title": "Course completed 🎉",
+      "description": "You completed Advanced TypeScript & Design Patterns. You can rewatch the course anytime.",
+      "read": false,
+      "createdAt": "2026-09-21T09:30:58.766Z"
+    },
+    {
+      "id": "11e0d6aa-7af3-4198-9f07-a00bf3e6465d",
+      "userId": "u1",
+      "title": "Quiz graded",
+      "description": "Advanced TypeScript & Design Patterns Assessment: 40/100",
+      "read": false,
+      "createdAt": "2026-09-21T09:30:24.164Z"
+    },
+    {
+      "id": "n1",
+      "userId": "u1",
+      "title": "Welcome to Skillbridge",
+      "description": "Your learning dashboard is ready.",
+      "read": false,
+      "createdAt": "2026-09-17T00:00:00Z"
+    }
+  ],
+  "notes": [],
+  "quizSessions": [
+    {
+      "id": "c9b7eb17-9639-41c3-9a70-a9a55b456b8c",
+      "userId": "u1",
+      "quizId": "quiz-c4",
+      "questionIds": [
+        "c4-q5",
+        "c4-q4",
+        "c4-q8",
+        "c4-q6",
+        "c4-q1"
+      ],
+      "createdAt": "2026-09-23T10:25:26.330Z"
+    },
+    {
+      "id": "e33cede0-12eb-4307-ac5d-6d267aa19a1d",
+      "userId": "u1",
+      "quizId": "q1",
+      "questionIds": [
+        "5",
+        "1",
+        "3",
+        "7",
+        "2"
+      ],
+      "createdAt": "2026-09-23T10:28:37.701Z"
+    }
+  ],
+  "certificates": [
+    {
+      "id": "02dd74b2-874e-4004-a35c-ccc2f4fbcf84",
+      "userId": "u1",
+      "courseId": "c1",
+      "courseTitle": "Advanced TypeScript & Design Patterns",
+      "studentName": "Alex Morgan",
+      "issuedAt": "2026-09-21T09:30:58.766Z"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "description": "Empowers learners and instructors with tools for course management, interactive lessons, skill assessments, and performance analytics in a seamless platform.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  },
+  "title": "Skillbridge | Learning Platform"
+}
