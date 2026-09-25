@@ -80,23 +80,74 @@ function Field({
 }
 function Page({ children }: { children: any }) {
   return (
-    <main className="relative pt-16 min-h-screen overflow-hidden bg-gradient-to-b from-emerald-300 via-black to-rose-500">
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute top-40 -left-40 w-[500px] h-[500px] rounded-full bg-cyan-300/20 blur-[120px]" />
+    <>
+      <style>{`
+        /* Animated background gradient */
+        @keyframes skillbridgeGradient {
+          0% {
+            background-position: 0% 50%;
+          }
 
-        <div className="absolute top-1/3 -right-40 w-[600px] h-[600px] rounded-half bg-purple-300/40 blur-[190px]" />
+          50% {
+            background-position: 100% 50%;
+          }
 
-        <div className="absolute top-1/3 -left-40 w-[600px] h-[600px] rounded-half bg-lime-200/20 blur-[140px]" />
-        
-        <div className="absolute -bottom-40 left-1/3 w-[500px] h-[500px] rounded-full bg-blue-300/20 blur-[130px]" />
-       </div>
+          100% {
+            background-position: 0% 50%;
+          }
+        }
 
-       <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-7">
+        /* Moving futuristic grid */
+        @keyframes futuristicGrid {
+          0% {
+            background-position: 0 0;
+          }
+
+          100% {
+            background-position: 50px 50px;
+          }
+        }
+      `}</style>
+
+      <main
+        className="relative pt-16 min-h-screen overflow-hidden bg-gradient-to-br from-red-100 via-teal-700 to-amber-300 bg-[length:200%_200%]"
+        style={{
+          animation: "skillbridgeGradient 15s ease infinite",
+        }}
+      >
+
+        {/* Animated Futuristic Grid */}
+        <div className="pointer-events-none fixed inset-0 overflow-hidden">
+          <div
+            className="absolute inset-0 opacity-7"
+            style={{
+              backgroundImage: `
+                linear-gradient(
+                  rgba(225, 237, 235, 0.6) 19px,
+                  transparent 26px
+                ),
+                linear-gradient(
+                    30deg,
+                  rgba(255, 0, 43, 0.55) 19px,
+                  transparent 29px
+                )
+              `,
+              backgroundSize: "50px 50px",
+              animation: "futuristicGrid 5s linear infinite",
+            }}
+          />
+        </div>
+
+        {/* Page Content */}
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-7">
           {children}
         </div>
-    </main>
+
+      </main>
+    </>
   );
 }
+
 function Modal({
   title,
   close,
@@ -111,7 +162,7 @@ function Modal({
       <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-white/70">
         <div className="flex items-center justify-between p-5 border-b border-slate-100 sticky top-0 bg-white/95 backdrop-blur z-10">
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+            <p className="text-xs font-bold uppercase tracking-wider text-purple-600">
               Skillbridge
             </p>
             <h2 className="text-xl font-bold mt-1">{title}</h2>
@@ -162,13 +213,13 @@ function Login({ onLogin }: { onLogin: (u: User) => void }) {
     }
   }
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-indigo-50/60 p-5">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-purple-50/60 p-5">
       <form
         onSubmit={submit}
         className="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-5 sm:p-8 shadow-xl shadow-slate-200/50"
       >
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-600 text-white grid place-items-center text-xl shadow-lg shadow-indigo-200">
+          <div className="w-14 h-14 rounded-2xl bg-purple-600 text-white grid place-items-center text-xl shadow-lg shadow-purple-200">
             ▲
           </div>
           <div>
@@ -303,6 +354,8 @@ function Nav({
   user: User;
   onLogout: () => void;
 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const studentNav: [Screen, string][] = [
     ["dashboard", "Dashboard"],
     ["courses", "Courses"],
@@ -311,45 +364,125 @@ function Nav({
     ["assignments", "Assignments"],
     ["progress", "My Progress"],
   ];
+
   const instructorNav: [Screen, string][] = [
     ["instructor", "Instructor"],
     ["courses", "Courses"],
     ["player", "Course Player"],
   ];
-  const items = user.role === "instructor" ? instructorNav : studentNav;
+
+  const items =
+    user.role === "instructor" ? instructorNav : studentNav;
+
+  const handleNavigation = (s: Screen) => {
+    setScreen(s);
+    setMenuOpen(false);
+  };
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white border-b border-slate-200 flex items-center px-3 sm:px-5 gap-2 overflow-x-auto">
-      <button
-        onClick={() =>
-          setScreen(user.role === "instructor" ? "instructor" : "dashboard")
-        }
-        className="font-bold text-lg sm:text-xl mr-2 sm:mr-4 whitespace-nowrap shrink-0"
-      >
-        ▲ <span className="text-slate-900">Skillbridge</span>
-      </button>
-      {items.map(([s, label]) => (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-slate-200">
+
+      <div className="h-16 flex items-center px-3 sm:px-5">
+
         <button
-          key={s}
-          onClick={() => setScreen(s)}
-          className={`px-3 py-2 rounded-lg text-sm font-medium transition ${screen === s ? "bg-indigo-50 text-indigo-600" : "text-slate-600 hover:bg-slate-50"}`}
+          onClick={() =>
+            handleNavigation(
+              user.role === "instructor" ? "instructor" : "dashboard"
+            )
+          }
+          className="font-bold text-lg sm:text-xl whitespace-nowrap shrink-0"
         >
-          {label}
+          📔 <span className="text-lime-600">Skillbridge</span>
         </button>
-      ))}
-      <div className="ml-auto flex items-center gap-2 sm:gap-3 shrink-0">
-        <span className="text-sm text-slate-500 hidden md:block">
-          {user.name}
-        </span>
-        <span className="hidden lg:inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 capitalize">
-          {user.role}
-        </span>
+
+        <nav className="hidden md:flex items-center gap-1 ml-6">
+          {items.map(([s, label]) => (
+            <button
+              key={s}
+              onClick={() => handleNavigation(s)}
+              className={`px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${
+                screen === s
+                  ? "bg-indigo-50 text-indigo-600"
+                  : "text-teal-600 hover:bg-slate-50"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="hidden md:flex ml-auto items-center gap-2 sm:gap-3">
+          <span className="text-sm text-slate-500">
+            {user.name}
+          </span>
+
+          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 capitalize">
+            {user.role}
+          </span>
+
+          <button
+            onClick={onLogout}
+            className="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm transition"
+          >
+            Logout
+          </button>
+        </div>
+
         <button
-          onClick={onLogout}
-          className="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm"
+          type="button"
+          onClick={() => setMenuOpen((v) => !v)}
+          className="md:hidden ml-auto w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-xl transition"
+          aria-label="Toggle navigation menu"
+          aria-expanded={menuOpen}
         >
-          Logout
+          {menuOpen ? "✕" : "☰"}
         </button>
       </div>
+
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div className="md:hidden border-t border-slate-200 bg-white shadow-lg">
+          <div className="p-3 space-y-1">
+
+            {items.map(([s, label]) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => handleNavigation(s)}
+                className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition ${
+                  screen === s
+                    ? "bg-indigo-50 text-indigo-600"
+                    : "text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+
+            <div className="border-t border-slate-200 mt-2 pt-3">
+              <div className="px-4 py-2">
+                <p className="font-semibold text-slate-800">
+                  {user.name}
+                </p>
+                <p className="text-xs text-slate-500 capitalize mt-1">
+                  {user.role}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuOpen(false);
+                  onLogout();
+                }}
+                className="w-full text-left px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm font-medium transition"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
@@ -399,10 +532,17 @@ function Dashboard({
     <Page>
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white transition-all duration-500"
+            style={{
+             textShadow: "0 0 4px rgba(6, 6, 6, 0.9), 0 2px 8px rgba(241, 22, 146, 0.7)"
+            }}
+            >
             Good {greeting}, {user.name.split(" ")[0]} 👋
           </h1>
-          <p className="text-black-500 mt-1">
+          <p className="text-white mt-1 transition-all duration-500"
+          style={{
+            textShadow: "0 0 4px rgba(33, 33, 33, 0.9), 0 2px 8px rgba(205, 9, 149, 0.92)"
+          }}>
             Your learning activity and upcoming work.
           </p>
         </div>
@@ -451,19 +591,30 @@ function Dashboard({
             },
           ],
         ].map(([icon, value, label, action]: any) => (
-          <button
-            type="button"
-            key={label}
-            onClick={action}
-            className="text-left bg-white border rounded-2xl p-5 cursor-pointer hover:-translate-y-0.5 hover:shadow-md hover:border-indigo-200 transition focus:outline-none focus:ring-2 focus:ring-indigo-200"
-          >
-            <span className="text-2xl">{icon}</span>
-            <b className="block text-3xl mt-2">{value}</b>
-            <span className="text-sm text-slate-500">{label}</span>
-            <span className="block text-xs text-indigo-600 font-semibold mt-3">
-              View details →
-            </span>
-          </button>
+ <button
+  type="button"
+  key={label}
+  onClick={action}
+  className="relative text-left rounded-2xl p-[3px] overflow-hidden focus:outline-none focus:ring-2 focus:ring-teal-600"
+>
+  <div
+    className="absolute inset-[-100%] animate-[spin_10s_linear_infinite] bg-[conic-gradient(from_0deg,#0d9488,#8b5cf6,#6366f1,#10b981)] blur-md opacity-70"
+  />
+
+  <div
+       className="absolute inset-[-100%] animate-[spin_2.5s_linear_infinite} bg-[conic-gradient(from_0deg,#0d9488,#8b5cf6,6366f1,#10b981])"/>
+  <div className="relative z-10 h-full rounded-[14px] bg-white p-5 hover:-translate-y-0.5 hover:shadow-md transition">
+    <span className="text-2xl">{icon}</span>
+
+    <b className="block text-3xl mt-2">{value}</b>
+
+    <span className="text-sm text-slate-500">{label}</span>
+
+    <span className="block text-xs text-indigo-600 font-semibold mt-3">
+      View details →
+    </span>
+  </div>
+</button>
         ))}
       </div>
       <div className="flex items-center justify-between mb-4">
@@ -931,7 +1082,7 @@ function CoursePlayer({
                     user.role === "instructor" ? "instructor" : "courses",
                   )
                 }
-                className="mt-5 px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold"
+                className="mt-5 px-5 py-2.5 rounded-xl bg-amber-600 text-white font-semibold"
               >
                 {user.role === "instructor"
                   ? "Back to Instructor"
@@ -1373,7 +1524,7 @@ function Assignments() {
     <Page>
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
         <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+          <p className="text-xs font-bold uppercase tracking-wider text-lime-400">
             STUDENT WORK
           </p>
 
@@ -1381,7 +1532,7 @@ function Assignments() {
             Assignments
           </h1>
 
-          <p className="text-rose-500 mt-1">
+          <p className="text-Fuchsia-500 mt-1">
             View your assignments, submit your work and check your grades.
           </p>
         </div>
@@ -2058,7 +2209,7 @@ function InstructorStudents({ onBack }: { onBack: () => void }) {
     <Page>
       <button
         onClick={onBack}
-        className="mb-5 text-sm font-semibold text-indigo-600"
+        className="mb-5 text-sm font-semibold text-amber-600"
       >
         ← Back to Instructor Dashboard
       </button>
@@ -2176,16 +2327,16 @@ function InstructorAnalytics({ onBack }: { onBack: () => void }) {
     <Page>
       <button
         onClick={onBack}
-        className="mb-5 text-sm font-semibold text-indigo-600"
+        className="mb-5 text-sm font-semibold text-amber-600"
       >
         ← Back to Instructor Dashboard
       </button>
       <div className="mb-6">
-        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+        <p className="text-xs font-bold uppercase tracking-wider text-olive-700">
           LEARNING ANALYTICS
         </p>
         <h1 className="text-3xl font-bold mt-1">Course Progress Analytics</h1>
-        <p className="text-slate-500 mt-1">
+        <p className="text-slate-700 mt-1">
           Understand enrollment and completion across the courses you teach.
         </p>
       </div>
@@ -2324,7 +2475,7 @@ function InstructorReviews({ onBack }: { onBack: () => void }) {
     <Page>
       <button
         onClick={onBack}
-        className="mb-5 text-sm font-semibold text-indigo-600"
+        className="mb-5 text-sm font-semibold text-amber-600"
       >
         ← Back to Instructor Dashboard
       </button>
@@ -2937,7 +3088,7 @@ function Instructor({ setScreen }: { setScreen: (s: Screen) => void }) {
             safeProgress(data.stats.completionRate),
             "Completion Rate",
             "Average progress",
-            "bg-emerald-50",
+            "bg-emerald-100",
           ],
         ].map((x) => (
           <div
@@ -2969,8 +3120,8 @@ function Instructor({ setScreen }: { setScreen: (s: Screen) => void }) {
       </section>
       <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Your Courses</h2>
-          <p className="text-sm text-slate-950 mt-1">
+          <h2 className="text-2xl text-purple-300 font-bold tracking-tight">Your Courses</h2>
+          <p className="text-sm text-white mt-1">
             Build and manage everything students see.
           </p>
         </div>
