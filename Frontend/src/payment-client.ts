@@ -172,11 +172,43 @@ function watchForPreviewVideo() {
 }
 
 // Inspect player responses without consuming the response used by the React app.
+// If an older backend instance still returns 403 for an unpaid student, fall back
+// to the public course payload and expose only the first lesson as a preview.
 const originalFetch = window.fetch.bind(window)
 window.fetch = async (...args: Parameters<typeof fetch>) => {
-  const response = await originalFetch(...args)
+  let response = await originalFetch(...args)
   const input = args[0]
   const url = typeof input === 'string' ? input : input instanceof Request ? input.url : ''
+
+  if (url.includes('/api/courses/') && url.endsWith('/player') && response.status === 403) {
+    const match = url.match(/\/api\/courses\/([^/]+)\/player$/)
+    if (match) {
+      try {
+        const headers = new Headers((args[1] as RequestInit | undefined)?.headers)
+        const courseResponse = await originalFetch(`/api/courses/${encodeURIComponent(match[1])}`, { headers })
+        if (courseResponse.ok) {
+          const courseData = await courseResponse.json()
+          const course = courseData.course
+          const lessons = Array.isArray(courseData.lessons) ? courseData.lessons : []
+          const seconds = Math.max(0, Math.round(Number(course?.previewMinutes ?? 3) * 60))
+          response = new Response(JSON.stringify({
+            course,
+            lessons: lessons.slice(0, 1),
+            enrolled: false,
+            preview: true,
+            previewSeconds: seconds || 180,
+            message: 'Free preview only. Purchase the course to unlock all lessons.',
+          }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          })
+        }
+      } catch {
+        // Keep the original 403 response if the preview fallback cannot load.
+      }
+    }
+  }
+
   if (url.includes('/api/courses/') && url.endsWith('/player')) {
     response.clone().json().then((data: any) => {
       if (data?.preview) {
