@@ -44,6 +44,9 @@ async function startPayment(button: HTMLButtonElement) {
   const key = import.meta.env.VITE_RAZORPAY_KEY_ID
   if (!key) throw new Error('VITE_RAZORPAY_KEY_ID is missing from Frontend/.env')
 
+  const Razorpay = window.Razorpay
+  if (!Razorpay) throw new Error('Razorpay Checkout did not load')
+
   const options = {
     key,
     amount: order.amount,
@@ -81,7 +84,7 @@ async function startPayment(button: HTMLButtonElement) {
     },
   }
 
-  const checkout = new window.Razorpay(options)
+  const checkout = new Razorpay(options)
   checkout.on('payment.failed', (response: any) => {
     window.alert(`Payment failed: ${response?.error?.description || 'Please try again.'}`)
   })
