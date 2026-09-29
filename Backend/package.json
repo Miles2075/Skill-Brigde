@@ -8,12 +8,17 @@
     "start": "node src/server.js"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "uuid": "^11.1.0",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "three": "^0.186.1",
+    "uuid": "^11.1.0"
   }
 }

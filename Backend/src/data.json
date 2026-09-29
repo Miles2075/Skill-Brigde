@@ -59,6 +59,18 @@
       "level": "Intermediate",
       "durationHours": 24,
       "published": true
+    },
+    {
+      "id": "4af73355-beb1-4706-b80e-9dce631214dd",
+      "title": "BBA",
+      "description": "Selling",
+      "category": "Business",
+      "level": "Beginner",
+      "durationHours": 5,
+      "published": true,
+      "instructorId": "u2",
+      "instructor": "Sarah Chen",
+      "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&auto=format&fit=crop"
     }
   ],
   "enrollments": [
@@ -147,6 +159,19 @@
         "c4-l5"
       ],
       "status": "in_progress"
+    },
+    {
+      "id": "bec37598-2f99-455e-b24a-f9e732a6d671",
+      "userId": "u1",
+      "courseId": "4af73355-beb1-4706-b80e-9dce631214dd",
+      "progress": 100,
+      "completedLessons": 1,
+      "completedLessonIds": [
+        "5c6014a6-d0e2-433a-bab4-587a36055fe7"
+      ],
+      "lastLessonId": "5c6014a6-d0e2-433a-bab4-587a36055fe7",
+      "status": "completed",
+      "completedAt": "2026-09-28T07:27:35.667Z"
     }
   ],
   "lessons": [
@@ -869,6 +894,16 @@
       "description": "Final Algorithms Challenge lesson for Data Structures & Algorithms.",
       "videoUrl": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
       "resources": []
+    },
+    {
+      "id": "5c6014a6-d0e2-433a-bab4-587a36055fe7",
+      "courseId": "4af73355-beb1-4706-b80e-9dce631214dd",
+      "title": "Intro",
+      "order": 1,
+      "duration": "10:00",
+      "description": "Basics",
+      "videoUrl": "/uploads/1790580362042-2_AM_COFFEE_-_A_short_film_Sony_FX3_4K_-_Forrain__1080p_.mp4",
+      "resources": []
     }
   ],
   "quizzes": [
@@ -1324,8 +1359,26 @@
       "remarksProvided": true
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "c68d513d-04b9-42ec-8644-7bdc9139211a",
+      "courseId": "4af73355-beb1-4706-b80e-9dce631214dd",
+      "lessonId": "5c6014a6-d0e2-433a-bab4-587a36055fe7",
+      "userId": "u1",
+      "userName": "Alex Morgan",
+      "body": "gang shi",
+      "createdAt": "2026-09-28T07:26:51.976Z"
+    }
+  ],
   "notifications": [
+    {
+      "id": "c2bde544-f901-430f-a02f-d4d3029e9d91",
+      "userId": "u1",
+      "title": "Course completed 🎉",
+      "description": "You completed BBA. You can rewatch the course anytime.",
+      "read": false,
+      "createdAt": "2026-09-28T07:27:35.667Z"
+    },
     {
       "id": "2864c9af-8261-4a27-8989-b77fd46d1e03",
       "userId": "u1",
@@ -1375,17 +1428,17 @@
       "createdAt": "2026-09-23T10:25:26.330Z"
     },
     {
-      "id": "45c21079-89a2-4e3a-8a5b-c4ce681a705f",
+      "id": "8cb847d6-4157-4b45-b9f6-d8b88e9081b1",
       "userId": "u1",
       "quizId": "q1",
       "questionIds": [
-        "3",
         "2",
+        "3",
+        "4",
         "5",
-        "7",
         "6"
       ],
-      "createdAt": "2026-09-25T07:13:05.683Z"
+      "createdAt": "2026-09-28T07:27:03.925Z"
     }
   ],
   "certificates": [
@@ -1396,6 +1449,14 @@
       "courseTitle": "Advanced TypeScript & Design Patterns",
       "studentName": "Alex Morgan",
       "issuedAt": "2026-09-21T09:30:58.766Z"
+    },
+    {
+      "id": "aae2b29e-dca5-4e7d-bf98-8b58ea1c4a77",
+      "userId": "u1",
+      "courseId": "4af73355-beb1-4706-b80e-9dce631214dd",
+      "courseTitle": "BBA",
+      "studentName": "Alex Morgan",
+      "issuedAt": "2026-09-28T07:27:35.667Z"
     }
   ]
 }

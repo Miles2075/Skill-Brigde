@@ -1,3 +1,4 @@
+import ThreeBackground from "./ThreeBackground";
 import {
   FormEvent,
   ChangeEvent,
@@ -110,30 +111,32 @@ function Page({ children }: { children: any }) {
       `}</style>
 
       <main
-        className="relative pt-16 min-h-screen overflow-hidden bg-gradient-to-br from-red-100 via-teal-700 to-amber-300 bg-[length:200%_200%]"
+      
+        className="relative pt-16 min-h-screen overflow-hidden bg-gradient-to-br from-red-500 via-teal-700 to-amber-900 bg-[length:200%_200%]"
         style={{
           animation: "skillbridgeGradient 15s ease infinite",
         }}
       >
+        <ThreeBackground /> 
 
         {/* Animated Futuristic Grid */}
         <div className="pointer-events-none fixed inset-0 overflow-hidden">
           <div
-            className="absolute inset-0 opacity-7"
+            className="absolute inset-0 opacity-25"
             style={{
               backgroundImage: `
                 linear-gradient(
-                  rgba(225, 237, 235, 0.6) 19px,
-                  transparent 26px
+                  rgba(255,255,255,0.18) 1px,
+                  transparent 1px
                 ),
                 linear-gradient(
-                    30deg,
-                  rgba(255, 0, 43, 0.55) 19px,
-                  transparent 29px
+                  90deg,
+                  rgba(255,255,255,0.18) 1px,
+                  transparent 1px
                 )
               `,
               backgroundSize: "50px 50px",
-              animation: "futuristicGrid 5s linear infinite",
+              animation: "futuristicGrid 8s linear infinite",
             }}
           />
         </div>
@@ -354,8 +357,6 @@ function Nav({
   user: User;
   onLogout: () => void;
 }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   const studentNav: [Screen, string][] = [
     ["dashboard", "Dashboard"],
     ["courses", "Courses"],
@@ -364,125 +365,45 @@ function Nav({
     ["assignments", "Assignments"],
     ["progress", "My Progress"],
   ];
-
   const instructorNav: [Screen, string][] = [
     ["instructor", "Instructor"],
     ["courses", "Courses"],
     ["player", "Course Player"],
   ];
-
-  const items =
-    user.role === "instructor" ? instructorNav : studentNav;
-
-  const handleNavigation = (s: Screen) => {
-    setScreen(s);
-    setMenuOpen(false);
-  };
-
+  const items = user.role === "instructor" ? instructorNav : studentNav;
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-slate-200">
-
-      <div className="h-16 flex items-center px-3 sm:px-5">
-
+    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white border-b border-slate-200 flex items-center px-3 sm:px-5 gap-2 overflow-x-auto">
+      <button
+        onClick={() =>
+          setScreen(user.role === "instructor" ? "instructor" : "dashboard")
+        }
+        className="font-bold text-lg sm:text-xl mr-2 sm:mr-4 whitespace-nowrap shrink-0"
+      >
+        📔 <span className="text-lime-600">Skillbridge</span>
+      </button>
+      {items.map(([s, label]) => (
         <button
-          onClick={() =>
-            handleNavigation(
-              user.role === "instructor" ? "instructor" : "dashboard"
-            )
-          }
-          className="font-bold text-lg sm:text-xl whitespace-nowrap shrink-0"
+          key={s}
+          onClick={() => setScreen(s)}
+          className={`px-3 py-2 rounded-lg text-sm font-medium transition ${screen === s ? "bg-indigo-50 text-indigo-600" : "text-teal-600 hover:bg-slate-50"}`}
         >
-          📔 <span className="text-lime-600">Skillbridge</span>
+          {label}
         </button>
-
-        <nav className="hidden md:flex items-center gap-1 ml-6">
-          {items.map(([s, label]) => (
-            <button
-              key={s}
-              onClick={() => handleNavigation(s)}
-              className={`px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${
-                screen === s
-                  ? "bg-indigo-50 text-indigo-600"
-                  : "text-teal-600 hover:bg-slate-50"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </nav>
-
-        <div className="hidden md:flex ml-auto items-center gap-2 sm:gap-3">
-          <span className="text-sm text-slate-500">
-            {user.name}
-          </span>
-
-          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 capitalize">
-            {user.role}
-          </span>
-
-          <button
-            onClick={onLogout}
-            className="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm transition"
-          >
-            Logout
-          </button>
-        </div>
-
+      ))}
+      <div className="ml-auto flex items-center gap-2 sm:gap-3 shrink-0">
+        <span className="text-sm text-slate-500 hidden md:block">
+          {user.name}
+        </span>
+        <span className="hidden lg:inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 capitalize">
+          {user.role}
+        </span>
         <button
-          type="button"
-          onClick={() => setMenuOpen((v) => !v)}
-          className="md:hidden ml-auto w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-xl transition"
-          aria-label="Toggle navigation menu"
-          aria-expanded={menuOpen}
+          onClick={onLogout}
+          className="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm"
         >
-          {menuOpen ? "✕" : "☰"}
+          Logout
         </button>
       </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white shadow-lg">
-          <div className="p-3 space-y-1">
-
-            {items.map(([s, label]) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => handleNavigation(s)}
-                className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition ${
-                  screen === s
-                    ? "bg-indigo-50 text-indigo-600"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-
-            <div className="border-t border-slate-200 mt-2 pt-3">
-              <div className="px-4 py-2">
-                <p className="font-semibold text-slate-800">
-                  {user.name}
-                </p>
-                <p className="text-xs text-slate-500 capitalize mt-1">
-                  {user.role}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setMenuOpen(false);
-                  onLogout();
-                }}
-                className="w-full text-left px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm font-medium transition"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }
@@ -532,17 +453,10 @@ function Dashboard({
     <Page>
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white transition-all duration-500"
-            style={{
-             textShadow: "0 0 4px rgba(6, 6, 6, 0.9), 0 2px 8px rgba(241, 22, 146, 0.7)"
-            }}
-            >
+          <h1 className="text-2xl sm:text-3xl font-bold">
             Good {greeting}, {user.name.split(" ")[0]} 👋
           </h1>
-          <p className="text-white mt-1 transition-all duration-500"
-          style={{
-            textShadow: "0 0 4px rgba(33, 33, 33, 0.9), 0 2px 8px rgba(205, 9, 149, 0.92)"
-          }}>
+          <p className="text-black-500 mt-1">
             Your learning activity and upcoming work.
           </p>
         </div>
@@ -737,8 +651,25 @@ function Courses({
 }) {
   const [courses, setCourses] = useState<Course[]>([]),
     [search, setSearch] = useState(""),
+    [categoryFilter, setCategoryFilter] = useState("All Categories"),
     [msg, setMsg] = useState("");
-  async function load(q = "") {
+
+  const categories = [
+    "Development",
+    "Data Science",
+    "AI & Machine Learning",
+    "IT & Software",
+    "Cybersecurity",
+    "Web Development",
+    "Programming Languages",
+    "Database",
+    "UI/UX Design",
+    "Cloud & DevOps",
+    "Business",
+    "Marketing",
+    "Personal Development",
+  ];
+  async function load(q = search, selectedCategory = categoryFilter) {
     try {
       const r =
         user.role === "instructor"
@@ -766,14 +697,23 @@ function Courses({
             .toLowerCase()
             .includes(q.toLowerCase()),
         );
+
+      if (selectedCategory !== "All Categories") {
+        list = list.filter(
+          (c: any) =>
+            String(c.category || "").toLowerCase() ===
+            selectedCategory.toLowerCase(),
+        );
+      }
+
       setCourses(list);
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "Could not load courses");
     }
   }
   useEffect(() => {
-    load();
-  }, [user.role, courseFilter]);
+    load(search, categoryFilter);
+  }, [user.role, courseFilter, categoryFilter]);
   async function enroll(id: string) {
     try {
       await api(`/courses/${id}/enroll`, { method: "POST" });
@@ -802,15 +742,30 @@ function Courses({
                 : "Explore published courses and start learning."}
           </p>
         </div>
-        <input
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            load(e.target.value);
-          }}
-          placeholder="Search courses…"
-          className="w-full md:w-80 border rounded-xl px-4 py-3"
-        />
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="w-full sm:w-64 border rounded-xl px-4 py-3 bg-white text-slate-700 font-medium outline-none focus:ring-2 focus:ring-indigo-200"
+          >
+            <option value="All Categories">All Categories</option>
+            {categories.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+
+          <input
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              load(e.target.value, categoryFilter);
+            }}
+            placeholder="Search courses…"
+            className="w-full md:w-80 border rounded-xl px-4 py-3"
+          />
+        </div>
       </div>
       {msg && (
         <div className="mb-4 p-3 bg-emerald-50 text-emerald-700 rounded-xl">
@@ -2629,6 +2584,22 @@ function Instructor({ setScreen }: { setScreen: (s: Screen) => void }) {
   const [level, setLevel] = useState("Beginner");
   const [duration, setDuration] = useState("10");
   const [message, setMessage] = useState("");
+
+  const categories = [
+    "Development",
+    "Data Science",
+    "AI & Machine Learning",
+    "IT & Software",
+    "Cybersecurity",
+    "Web Development",
+    "Programming Languages",
+    "Database",
+    "UI/UX Design",
+    "Cloud & DevOps",
+    "Business",
+    "Marketing",
+    "Personal Development",
+  ];
   const load = () =>
     api<any>("/instructor/overview")
       .then(setData)
@@ -2803,7 +2774,22 @@ function Instructor({ setScreen }: { setScreen: (s: Screen) => void }) {
               value={description}
               onChange={setDescription}
             />
-            <Field label="Category" value={category} onChange={setCategory} />
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                Category
+              </label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-800 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              >
+                {categories.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </div>
             <Field label="Level" value={level} onChange={setLevel} />
             <Field
               label="Duration (hours)"
@@ -2829,7 +2815,22 @@ function Instructor({ setScreen }: { setScreen: (s: Screen) => void }) {
               value={description}
               onChange={setDescription}
             />
-            <Field label="Category" value={category} onChange={setCategory} />
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                Category
+              </label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-800 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              >
+                {categories.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </div>
             <Field label="Level" value={level} onChange={setLevel} />
             <Field
               label="Duration (hours)"
