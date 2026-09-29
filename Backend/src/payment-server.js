@@ -14,6 +14,7 @@ import { v4 as uuid } from 'uuid'
 dotenv.config()
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DATA_FILE = path.join(__dirname, 'data.json')
+const UPLOADS = path.join(__dirname, '..', 'uploads')
 const PORT = Number(process.env.PORT || 5000)
 const INTERNAL_PORT = Number(process.env.INTERNAL_BACKEND_PORT || 5001)
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me'
@@ -22,6 +23,13 @@ const KEY_SECRET = process.env.RAZORPAY_KEY_SECRET
 const razorpay = KEY_ID && KEY_SECRET ? new Razorpay({ key_id: KEY_ID, key_secret: KEY_SECRET }) : null
 const app = express()
 app.use(cors({ origin: true, credentials: true }))
+// Serve uploaded course videos directly from the public /uploads path.
+// Do not send uploads through the /api proxy: the proxy rewrites paths to
+// /api/... and turns valid video URLs into "Cannot GET /api/<filename>".
+app.use('/uploads', express.static(UPLOADS, {
+  acceptRanges: true,
+  fallthrough: true,
+}))
 const read = async () => JSON.parse(await fs.readFile(DATA_FILE, 'utf8'))
 const save = data => fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2))
 const coursePricePaise = course => { const value = Number(course?.pricePaise ?? 49900); return Number.isFinite(value) ? Math.max(0, Math.round(value)) : 49900 }
@@ -69,8 +77,6 @@ app.get('/api/courses/:id/player', auth, async (req, res) => {
     if (req.user.role === 'instructor' && !instructorOwner) return res.status(403).json({ message: 'You can only preview your own courses' })
     const lessons = data.lessons.filter(item => item.courseId === course.id).sort((a, b) => a.order - b.order)
     const paidCourse = coursePricePaise(course) > 0
-    // An enrollment created by the old/free enrollment flow is not proof of payment.
-    // Only a verified Razorpay enrollment (paid:true) unlocks a paid course.
     const paidEnrollment = Boolean(enrollment?.paid) || instructorOwner
     if (!paidCourse || paidEnrollment) return res.json({ course, lessons, enrolled: Boolean(enrollment) || instructorOwner, paid: paidEnrollment, preview: false, previewSeconds: 0 })
     return res.json({ course, lessons: lessons.slice(0, 1), enrolled: Boolean(enrollment), paid: false, preview: true, previewSeconds: previewSeconds(course), message: 'Free preview only. Purchase the course to unlock all lessons.' })
@@ -135,17 +141,13 @@ app.post('/api/courses/:id/enroll', express.json(), auth, async (req, res, next)
   next()
 })
 
-// The proxy is mounted at /api, so Express removes the /api prefix before
-// forwarding. Restore it here because the internal backend registers all API
-// routes under /api (for example /api/auth/login). Without this rewrite,
-// login requests arrive internally as /auth/login and return "Cannot POST".
 const proxy = createProxyMiddleware({
   target: `http://127.0.0.1:${INTERNAL_PORT}`,
   changeOrigin: true,
   pathRewrite: path => `/api${path}`,
 })
 app.use('/api', proxy)
-app.use('/uploads', proxy)
+// /uploads is served above and must not use the API proxy.
 const child = spawn(process.execPath, [path.join(__dirname, 'server.js')], { env: { ...process.env, PORT: String(INTERNAL_PORT) }, stdio: 'inherit' })
 child.on('exit', code => { if (code && code !== 0) process.exit(code) })
 const server = app.listen(PORT, () => console.log(`Skillbridge API + Razorpay running at http://localhost:${PORT}`))
