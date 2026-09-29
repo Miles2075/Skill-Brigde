@@ -51,24 +51,21 @@ async function auth(req, res, next) {
   }
 }
 
-// Instructor controls the price and free-preview duration for their own courses.
 app.patch('/api/courses/:id/settings', express.json(), auth, async (req, res) => {
   try {
     if (req.user.role !== 'instructor') return res.status(403).json({ message: 'Only instructors can change course pricing' })
     const data = await read()
-    const course = data.courses.find(item => item.id === req.params.id && item.instructorId === req.user.id)
+    const requestedId = String(req.params.id || '').trim()
+    const requestedTitle = String(req.body.courseTitle || '').trim().toLowerCase()
+    const course = data.courses.find(item => item.instructorId === req.user.id && (item.id === requestedId || (!requestedId && requestedTitle && String(item.title).toLowerCase() === requestedTitle)))
     if (!course) return res.status(404).json({ message: 'Course not found or you do not own it' })
 
     const rawPrice = req.body.pricePaise != null ? Number(req.body.pricePaise) : Number(req.body.price)
     const rawMinutes = Number(req.body.previewMinutes)
     const pricePaise = req.body.pricePaise != null ? rawPrice : rawPrice * 100
 
-    if (!Number.isFinite(pricePaise) || pricePaise < 0 || !Number.isInteger(pricePaise)) {
-      return res.status(400).json({ message: 'Price must be a non-negative whole amount' })
-    }
-    if (!Number.isFinite(rawMinutes) || rawMinutes < 0 || rawMinutes > 120 || !Number.isInteger(rawMinutes)) {
-      return res.status(400).json({ message: 'Preview must be between 0 and 120 whole minutes' })
-    }
+    if (!Number.isFinite(pricePaise) || pricePaise < 0 || !Number.isInteger(pricePaise)) return res.status(400).json({ message: 'Price must be a non-negative whole amount' })
+    if (!Number.isFinite(rawMinutes) || rawMinutes < 0 || rawMinutes > 120 || !Number.isInteger(rawMinutes)) return res.status(400).json({ message: 'Preview must be between 0 and 120 whole minutes' })
 
     course.pricePaise = pricePaise
     course.previewMinutes = rawMinutes
@@ -81,8 +78,6 @@ app.patch('/api/courses/:id/settings', express.json(), auth, async (req, res) =>
   }
 })
 
-// Course player access: enrolled students get the complete course; unpaid students
-// receive only the first lesson for the configured preview duration.
 app.get('/api/courses/:id/player', auth, async (req, res) => {
   try {
     const data = await read()
@@ -97,14 +92,11 @@ app.get('/api/courses/:id/player', auth, async (req, res) => {
     const paid = coursePricePaise(course) > 0
     const enrolled = Boolean(enrollment) || instructorOwner
 
-    if (!paid || enrolled) {
-      return res.json({ course, lessons, enrolled, preview: false, previewSeconds: 0 })
-    }
+    if (!paid || enrolled) return res.json({ course, lessons, enrolled, preview: false, previewSeconds: 0 })
 
-    const firstLesson = lessons.slice(0, 1)
     return res.json({
       course,
-      lessons: firstLesson,
+      lessons: lessons.slice(0, 1),
       enrolled: false,
       preview: true,
       previewSeconds: previewSeconds(course),
@@ -120,34 +112,19 @@ app.post('/api/create-order', express.json(), auth, async (req, res) => {
   try {
     if (!razorpay) return res.status(500).json({ message: 'Razorpay is not configured. Add the test keys to Backend/.env' })
     if (req.user.role !== 'student') return res.status(403).json({ message: 'Only students can purchase courses' })
-
     const data = await read()
     const courseId = String(req.body.courseId || '').trim()
     const courseTitle = String(req.body.courseTitle || '').trim()
     const course = data.courses.find(item => item.id === courseId || (!courseId && item.title === courseTitle))
-
     if (!course) return res.status(404).json({ message: 'Course not found' })
     if (!course.published) return res.status(400).json({ message: 'This course is not published yet' })
     if (enrollmentFor(data, course.id, req.user.id)) return res.status(409).json({ message: 'Already enrolled' })
-
     const amount = coursePricePaise(course)
     if (amount === 0) return res.status(400).json({ message: 'This course is free. Use the free enrollment action.' })
     if (!Number.isInteger(amount) || amount < 100) return res.status(400).json({ message: 'Course price must be at least 100 paise' })
 
-    const order = await razorpay.orders.create({
-      amount,
-      currency: 'INR',
-      receipt: `skillbridge_${course.id}_${Date.now()}`.slice(0, 40),
-      notes: { courseId: course.id, userId: req.user.id },
-    })
-
-    res.json({
-      order_id: order.id,
-      amount: order.amount,
-      currency: order.currency,
-      course: { id: course.id, title: course.title, pricePaise: amount, previewMinutes: Number(course.previewMinutes ?? 3) },
-      user: { name: req.user.name, email: req.user.email },
-    })
+    const order = await razorpay.orders.create({ amount, currency: 'INR', receipt: `skillbridge_${course.id}_${Date.now()}`.slice(0, 40), notes: { courseId: course.id, userId: req.user.id } })
+    res.json({ order_id: order.id, amount: order.amount, currency: order.currency, course: { id: course.id, title: course.title, pricePaise: amount, previewMinutes: Number(course.previewMinutes ?? 3) }, user: { name: req.user.name, email: req.user.email } })
   } catch (error) {
     const status = error?.statusCode === 401 || error?.statusCode === 403 ? 401 : 500
     console.error('Razorpay create-order error:', error?.error?.description || error?.message || error)
@@ -159,8 +136,7 @@ app.post('/api/verify-payment', express.json(), auth, async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, courseId } = req.body || {}
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !courseId) return res.status(400).json({ message: 'Missing payment verification fields' })
-    if (!razorpay) return res.status(500).json({ message: 'Razorpay is not configured' })
-    if (!KEY_SECRET) return res.status(500).json({ message: 'Razorpay secret is not configured' })
+    if (!razorpay || !KEY_SECRET) return res.status(500).json({ message: 'Razorpay is not configured' })
     if (req.user.role !== 'student') return res.status(403).json({ message: 'Only students can purchase courses' })
 
     const data = await read()
@@ -176,9 +152,7 @@ app.post('/api/verify-payment', express.json(), auth, async (req, res) => {
 
     const order = await razorpay.orders.fetch(razorpay_order_id)
     const expectedAmount = coursePricePaise(course)
-    const orderCourseId = String(order?.notes?.courseId || '')
-    const orderUserId = String(order?.notes?.userId || '')
-    if (orderCourseId !== course.id || orderUserId !== req.user.id) return res.status(400).json({ message: 'Payment order does not match this student and course' })
+    if (String(order?.notes?.courseId || '') !== course.id || String(order?.notes?.userId || '') !== req.user.id) return res.status(400).json({ message: 'Payment order does not match this student and course' })
     if (Number(order.amount) !== expectedAmount || String(order.currency) !== 'INR') return res.status(400).json({ message: 'Payment amount does not match the course price' })
     if (order.status !== 'paid') return res.status(400).json({ message: 'Payment order has not been paid' })
 
@@ -188,11 +162,7 @@ app.post('/api/verify-payment', express.json(), auth, async (req, res) => {
     if (Number(payment.amount) !== expectedAmount || String(payment.currency) !== 'INR') return res.status(400).json({ message: 'Captured payment amount does not match the course price' })
 
     const paidAt = new Date().toISOString()
-    const enrollment = {
-      id: uuid(), userId: req.user.id, courseId: course.id, progress: 0, completedLessons: 0,
-      completedLessonIds: [], lastLessonId: null, status: 'not_started', paid: true,
-      razorpayOrderId: razorpay_order_id, razorpayPaymentId: razorpay_payment_id, paidAt,
-    }
+    const enrollment = { id: uuid(), userId: req.user.id, courseId: course.id, progress: 0, completedLessons: 0, completedLessonIds: [], lastLessonId: null, status: 'not_started', paid: true, razorpayOrderId: razorpay_order_id, razorpayPaymentId: razorpay_payment_id, paidAt }
     data.enrollments.push(enrollment)
     if (!Array.isArray(data.payments)) data.payments = []
     data.payments.push({ id: uuid(), userId: req.user.id, courseId: course.id, orderId: razorpay_order_id, paymentId: razorpay_payment_id, amountPaise: expectedAmount, status: 'paid', createdAt: paidAt })
@@ -204,7 +174,6 @@ app.post('/api/verify-payment', express.json(), auth, async (req, res) => {
   }
 })
 
-// Paid courses cannot be enrolled through the old direct route. Free courses can.
 app.post('/api/courses/:id/enroll', express.json(), auth, async (req, res, next) => {
   if (req.user.role === 'student') {
     const data = await read()
@@ -218,20 +187,9 @@ const proxy = createProxyMiddleware({ target: `http://127.0.0.1:${INTERNAL_PORT}
 app.use('/api', proxy)
 app.use('/uploads', proxy)
 
-const child = spawn(process.execPath, [path.join(__dirname, 'server.js')], {
-  env: { ...process.env, PORT: String(INTERNAL_PORT) },
-  stdio: 'inherit',
-})
-child.on('exit', code => {
-  if (code && code !== 0) process.exit(code)
-})
-
-const server = app.listen(PORT, () => {
-  console.log(`Skillbridge API + Razorpay running at http://localhost:${PORT}`)
-})
-
-function shutdown() {
-  server.close(() => child.kill('SIGTERM'))
-}
+const child = spawn(process.execPath, [path.join(__dirname, 'server.js')], { env: { ...process.env, PORT: String(INTERNAL_PORT) }, stdio: 'inherit' })
+child.on('exit', code => { if (code && code !== 0) process.exit(code) })
+const server = app.listen(PORT, () => console.log(`Skillbridge API + Razorpay running at http://localhost:${PORT}`))
+function shutdown() { server.close(() => child.kill('SIGTERM')) }
 process.on('SIGINT', shutdown)
 process.on('SIGTERM', shutdown)
