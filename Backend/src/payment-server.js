@@ -45,11 +45,12 @@ async function auth(req, res, next) {
 app.post('/api/create-order', express.json(), auth, async (req, res) => {
   try {
     if (!razorpay) return res.status(500).json({ message: 'Razorpay is not configured. Add the test keys to Backend/.env' })
+    if (req.user.role !== 'student') return res.status(403).json({ message: 'Only students can purchase courses' })
 
     const data = await read()
     const courseId = String(req.body.courseId || '').trim()
     const courseTitle = String(req.body.courseTitle || '').trim()
-    const course = data.courses.find(item => item.id === courseId || item.title === courseTitle)
+    const course = data.courses.find(item => item.id === courseId || (!courseId && item.title === courseTitle))
 
     if (!course) return res.status(404).json({ message: 'Course not found' })
     if (!course.published) return res.status(400).json({ message: 'This course is not published yet' })
@@ -91,8 +92,19 @@ app.post('/api/verify-payment', express.json(), auth, async (req, res) => {
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !courseId) {
       return res.status(400).json({ message: 'Missing payment verification fields' })
     }
+    if (!razorpay) return res.status(500).json({ message: 'Razorpay is not configured' })
     if (!KEY_SECRET) return res.status(500).json({ message: 'Razorpay secret is not configured' })
+    if (req.user.role !== 'student') return res.status(403).json({ message: 'Only students can purchase courses' })
 
+    const data = await read()
+    const course = data.courses.find(item => item.id === String(courseId))
+    if (!course) return res.status(404).json({ message: 'Course not found' })
+    if (!course.published) return res.status(400).json({ message: 'This course is not published yet' })
+    if (data.enrollments.some(e => e.userId === req.user.id && e.courseId === course.id)) {
+      return res.json({ success: true, alreadyEnrolled: true })
+    }
+
+    // First verify that the signature was generated from this exact order/payment pair.
     const expected = crypto
       .createHmac('sha256', KEY_SECRET)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
@@ -102,18 +114,39 @@ app.post('/api/verify-payment', express.json(), auth, async (req, res) => {
 
     if (!valid) return res.status(400).json({ message: 'Payment signature verification failed' })
 
-    const data = await read()
-    const course = data.courses.find(item => item.id === courseId)
-    if (!course) return res.status(404).json({ message: 'Course not found' })
-    if (data.enrollments.some(e => e.userId === req.user.id && e.courseId === courseId)) {
-      return res.json({ success: true, alreadyEnrolled: true })
+    // Never trust courseId from the browser alone. Fetch the Razorpay order and make
+    // sure it was created for this student and this exact course/amount.
+    const order = await razorpay.orders.fetch(razorpay_order_id)
+    const expectedAmount = Math.round(Number(course.pricePaise ?? 49900))
+    const orderCourseId = String(order?.notes?.courseId || '')
+    const orderUserId = String(order?.notes?.userId || '')
+
+    if (orderCourseId !== course.id || orderUserId !== req.user.id) {
+      return res.status(400).json({ message: 'Payment order does not match this student and course' })
+    }
+    if (Number(order.amount) !== expectedAmount || String(order.currency) !== 'INR') {
+      return res.status(400).json({ message: 'Payment amount does not match the course price' })
+    }
+    if (order.status !== 'paid') {
+      return res.status(400).json({ message: 'Payment order has not been paid' })
+    }
+
+    const payment = await razorpay.payments.fetch(razorpay_payment_id)
+    if (!payment || payment.order_id !== razorpay_order_id) {
+      return res.status(400).json({ message: 'Payment does not belong to the verified order' })
+    }
+    if (payment.status !== 'captured') {
+      return res.status(400).json({ message: `Payment is not captured (status: ${payment.status || 'unknown'})` })
+    }
+    if (Number(payment.amount) !== expectedAmount || String(payment.currency) !== 'INR') {
+      return res.status(400).json({ message: 'Captured payment amount does not match the course price' })
     }
 
     const paidAt = new Date().toISOString()
     const enrollment = {
       id: uuid(),
       userId: req.user.id,
-      courseId,
+      courseId: course.id,
       progress: 0,
       completedLessons: 0,
       completedLessonIds: [],
@@ -130,10 +163,10 @@ app.post('/api/verify-payment', express.json(), auth, async (req, res) => {
     data.payments.push({
       id: uuid(),
       userId: req.user.id,
-      courseId,
+      courseId: course.id,
       orderId: razorpay_order_id,
       paymentId: razorpay_payment_id,
-      amountPaise: Number(course.pricePaise ?? 49900),
+      amountPaise: expectedAmount,
       status: 'paid',
       createdAt: paidAt,
     })
@@ -141,9 +174,18 @@ app.post('/api/verify-payment', express.json(), auth, async (req, res) => {
     await save(data)
     res.json({ success: true, enrollment })
   } catch (error) {
-    console.error('Razorpay verify-payment error:', error?.message || error)
-    res.status(400).json({ message: 'Payment verification failed' })
+    console.error('Razorpay verify-payment error:', error?.error?.description || error?.message || error)
+    res.status(error?.statusCode === 401 ? 401 : 400).json({ message: error?.error?.description || 'Payment verification failed' })
   }
+})
+
+// Block the old direct-enrollment route for students. Enrollment now happens only
+// after a verified Razorpay payment. Instructors can still reach the original API.
+app.post('/api/courses/:id/enroll', express.json(), auth, async (req, res, next) => {
+  if (req.user.role === 'student') {
+    return res.status(402).json({ message: 'Payment required. Use the course Enroll button to complete checkout.' })
+  }
+  next()
 })
 
 // Keep the existing Skillbridge API and video uploads working on the same port.
