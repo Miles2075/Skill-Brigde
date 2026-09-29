@@ -129,7 +129,15 @@ app.post('/api/courses/:id/enroll', express.json(), auth, async (req, res, next)
   next()
 })
 
-const proxy = createProxyMiddleware({ target: `http://127.0.0.1:${INTERNAL_PORT}`, changeOrigin: true })
+// The proxy is mounted at /api, so Express removes the /api prefix before
+// forwarding. Restore it here because the internal backend registers all API
+// routes under /api (for example /api/auth/login). Without this rewrite,
+// login requests arrive internally as /auth/login and return "Cannot POST".
+const proxy = createProxyMiddleware({
+  target: `http://127.0.0.1:${INTERNAL_PORT}`,
+  changeOrigin: true,
+  pathRewrite: path => `/api${path}`,
+})
 app.use('/api', proxy)
 app.use('/uploads', proxy)
 const child = spawn(process.execPath, [path.join(__dirname, 'server.js')], { env: { ...process.env, PORT: String(INTERNAL_PORT) }, stdio: 'inherit' })
