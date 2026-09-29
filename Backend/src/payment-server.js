@@ -68,9 +68,12 @@ app.get('/api/courses/:id/player', auth, async (req, res) => {
     const instructorOwner = req.user.role === 'instructor' && course.instructorId === req.user.id
     if (req.user.role === 'instructor' && !instructorOwner) return res.status(403).json({ message: 'You can only preview your own courses' })
     const lessons = data.lessons.filter(item => item.courseId === course.id).sort((a, b) => a.order - b.order)
-    const paid = coursePricePaise(course) > 0, enrolled = Boolean(enrollment) || instructorOwner
-    if (!paid || enrolled) return res.json({ course, lessons, enrolled, preview: false, previewSeconds: 0 })
-    return res.json({ course, lessons: lessons.slice(0, 1), enrolled: false, preview: true, previewSeconds: previewSeconds(course), message: 'Free preview only. Purchase the course to unlock all lessons.' })
+    const paidCourse = coursePricePaise(course) > 0
+    // An enrollment created by the old/free enrollment flow is not proof of payment.
+    // Only a verified Razorpay enrollment (paid:true) unlocks a paid course.
+    const paidEnrollment = Boolean(enrollment?.paid) || instructorOwner
+    if (!paidCourse || paidEnrollment) return res.json({ course, lessons, enrolled: Boolean(enrollment) || instructorOwner, paid: paidEnrollment, preview: false, previewSeconds: 0 })
+    return res.json({ course, lessons: lessons.slice(0, 1), enrolled: Boolean(enrollment), paid: false, preview: true, previewSeconds: previewSeconds(course), message: 'Free preview only. Purchase the course to unlock all lessons.' })
   } catch (error) { console.error('Course player error:', error); res.status(500).json({ message: 'Could not load course player' }) }
 })
 
@@ -82,7 +85,7 @@ app.post('/api/create-order', express.json(), auth, async (req, res) => {
     const course = data.courses.find(item => item.id === courseId || (!courseId && item.title === courseTitle))
     if (!course) return res.status(404).json({ message: 'Course not found' })
     if (!course.published) return res.status(400).json({ message: 'This course is not published yet' })
-    if (enrollmentFor(data, course.id, req.user.id)) return res.status(409).json({ message: 'Already enrolled' })
+    if (enrollmentFor(data, course.id, req.user.id)?.paid) return res.status(409).json({ message: 'Already enrolled' })
     const amount = coursePricePaise(course)
     if (amount === 0) return res.status(400).json({ message: 'This course is free. Use the free enrollment action.' })
     if (!Number.isInteger(amount) || amount < 100) return res.status(400).json({ message: 'Course price must be at least 100 paise' })
@@ -100,7 +103,8 @@ app.post('/api/verify-payment', express.json(), auth, async (req, res) => {
     const data = await read(), course = data.courses.find(item => item.id === String(courseId))
     if (!course) return res.status(404).json({ message: 'Course not found' })
     if (!course.published) return res.status(400).json({ message: 'This course is not published yet' })
-    if (enrollmentFor(data, course.id, req.user.id)) return res.json({ success: true, alreadyEnrolled: true })
+    const existingEnrollment = enrollmentFor(data, course.id, req.user.id)
+    if (existingEnrollment?.paid) return res.json({ success: true, alreadyEnrolled: true })
     const expected = crypto.createHmac('sha256', KEY_SECRET).update(`${razorpay_order_id}|${razorpay_payment_id}`).digest('hex'), supplied = String(razorpay_signature)
     const valid = supplied.length === expected.length && crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(supplied))
     if (!valid) return res.status(400).json({ message: 'Payment signature verification failed' })
@@ -112,8 +116,10 @@ app.post('/api/verify-payment', express.json(), auth, async (req, res) => {
     if (!payment || payment.order_id !== razorpay_order_id) return res.status(400).json({ message: 'Payment does not belong to the verified order' })
     if (payment.status !== 'captured') return res.status(400).json({ message: `Payment is not captured (status: ${payment.status || 'unknown'})` })
     if (Number(payment.amount) !== expectedAmount || String(payment.currency) !== 'INR') return res.status(400).json({ message: 'Captured payment amount does not match the course price' })
-    const paidAt = new Date().toISOString(), enrollment = { id: uuid(), userId: req.user.id, courseId: course.id, progress: 0, completedLessons: 0, completedLessonIds: [], lastLessonId: null, status: 'not_started', paid: true, razorpayOrderId: razorpay_order_id, razorpayPaymentId: razorpay_payment_id, paidAt }
-    data.enrollments.push(enrollment)
+    const paidAt = new Date().toISOString()
+    const enrollment = existingEnrollment || { id: uuid(), userId: req.user.id, courseId: course.id, progress: 0, completedLessons: 0, completedLessonIds: [], lastLessonId: null }
+    Object.assign(enrollment, { status: 'not_started', paid: true, razorpayOrderId: razorpay_order_id, razorpayPaymentId: razorpay_payment_id, paidAt })
+    if (!existingEnrollment) data.enrollments.push(enrollment)
     if (!Array.isArray(data.payments)) data.payments = []
     data.payments.push({ id: uuid(), userId: req.user.id, courseId: course.id, orderId: razorpay_order_id, paymentId: razorpay_payment_id, amountPaise: expectedAmount, status: 'paid', createdAt: paidAt })
     await save(data)
